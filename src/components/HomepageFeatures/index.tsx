@@ -27,7 +27,11 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Contact Me',
-    description: <>isdhzh@outlook.com</>
+    description: (
+      <>
+        <a href="mailto:isdhzh@outlook.com">isdhzh@outlook.com</a>
+      </>
+    )
   }
 ];
 
