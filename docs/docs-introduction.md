@@ -11,6 +11,4 @@ slug: /
 
 ## Others
 
-### Tools
-
-#### [Visual Studio Code](/docs/Visual%20Studio%20Code)
+### [Visual Studio Code](/docs/Visual%20Studio%20Code)
