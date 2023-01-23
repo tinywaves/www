@@ -17,6 +17,24 @@ const sidebars = {
     'docs-introduction',
     {
       type: 'category',
+      label: 'Block Chain',
+      items: [
+        {
+          type: 'category',
+          label: '学习与毕业设计',
+          link: {
+            type: 'generated-index',
+            title: '学习与毕业设计',
+            slug: '/block-chain/learn-graduation-project'
+          },
+          items: [
+            'BlockChain/学习与毕业设计/区块链知识储备'
+          ]
+        }
+      ]
+    },
+    {
+      type: 'category',
       label: 'Others',
       link: {
         type: 'generated-index',
