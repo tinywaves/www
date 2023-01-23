@@ -19,7 +19,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'zh-CN',
-    locales: ['zh-CN'],
+    locales: ['zh-CN']
   },
 
   presets: [
@@ -57,9 +57,9 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'docs-category',
+            docId: 'docs-introduction',
             position: 'right',
-            label: 'Technology accumulations',
+            label: 'Technology accumulations'
           },
           { to: '/blog', label: 'Blogs', position: 'right' },
           {

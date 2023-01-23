@@ -1,6 +1,6 @@
 ---
-title: 常用快捷键整理
-tags: [VS Code]
+title: 个人常用快捷键收集
+tags: [Visual Studio Code]
 ---
 
 | Keyboard shortcut | Remark                                 |
