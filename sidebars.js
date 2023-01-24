@@ -17,6 +17,26 @@ const sidebars = {
     'docs-introduction',
     {
       type: 'category',
+      label: 'Algorithm',
+      link: {
+        type: 'generated-index',
+        title: 'Algorithm',
+        slug: '/algorithm'
+      },
+      items: [
+        {
+          type: 'category',
+          label: 'LeetCode',
+          link: {
+            type: 'doc',
+            id: 'LeetCode/index'
+          },
+          items: []
+        }
+      ]
+    },
+    {
+      type: 'category',
       label: 'Block Chain',
       items: [
         {
