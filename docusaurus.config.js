@@ -52,7 +52,7 @@ const config = {
         title: "tinyRipple's Personal Website",
         logo: {
           alt: "tinyRipple's Personal Website Logo",
-          src: 'img/logo.svg',
+          src: 'img/logo.svg'
         },
         items: [
           {
@@ -65,9 +65,9 @@ const config = {
           {
             href: 'https://github.com/tinyRipple/accumulations',
             position: 'right',
-            className: 'header-github-link',
-          },
-        ],
+            className: 'header-github-link'
+          }
+        ]
       },
       prism: {
         theme: lightCodeTheme,
