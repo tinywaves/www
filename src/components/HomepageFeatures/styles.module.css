@@ -5,10 +5,7 @@
   width: 100%;
 }
 
-.title {
-  font-weight: 900;
-}
-
-.description {
-  font-weight: 500;
+.featureSvg {
+  height: 200px;
+  width: 200px;
 }

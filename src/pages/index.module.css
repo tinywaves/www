@@ -3,16 +3,11 @@
  * and scoped locally.
  */
 
-.heroBanner,
-[data-theme='dark'] .heroBanner {
+.heroBanner {
   padding: 4rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
-}
-
-[data-theme='dark'] .heroBanner {
-  background-color: #1b1b1d;
 }
 
 @media screen and (max-width: 996px) {
