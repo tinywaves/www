@@ -6,7 +6,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Website",
+  title: 'Website',
   tagline: 'Focus on React.js and Golang',
   favicon: 'img/favicon.ico',
   // Set the production url of your site here
@@ -51,18 +51,23 @@ const config = {
           src: 'img/avatar.png',
         },
         items: [
+          { type: 'search', position: 'left' },
           { to: '/blog', label: 'Blog', position: 'right' },
           {
             href: 'https://github.com/tinyRipple/website',
-            // label: 'GitHub',
             position: 'right',
-            className: 'header-github-link'
+            className: 'header-github-link',
           },
         ],
       },
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+      },
+      algolia: {
+        appId: 'BX6IW2IRH9',
+        apiKey: '6d0c92a974f223f4a8d10d560e0ee951',
+        indexName: 'web-dzh',
       },
     }),
 };
