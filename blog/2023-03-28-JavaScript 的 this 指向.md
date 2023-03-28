@@ -9,11 +9,11 @@ tags: [JavaScript]
 
 在`浏览器环境`下，全局下的 this 绑定`window`，在`Node 环境`下，全局下的 this 绑定一个空对象`{}`。
 
-# 在普通函数中 this 的绑定规则
+## 在普通函数中 this 的绑定规则
 
 this 是`动态绑定`的，即在`函数运行时`才能确定 this 的指向，与 this`出现的位置没有关系`，因此在`编译时不能确定 this 的指向`。
 
-## Ⅰ 默认绑定
+### Ⅰ 默认绑定
 
 **独立的函数调用**可以理解成函数没有被绑定到某个对象上进行调用。在严格模式下，this 为`undefined`；在非严格模式下，浏览器环境中的 this 绑定为`window`，Node 环境中的 this 绑定为`global`。
 
@@ -75,7 +75,7 @@ function foo() {
 foo(); // undefined
 ```
 
-## Ⅱ 隐式绑定
+### Ⅱ 隐式绑定
 
 通过**某个对象发起**的函数调用。
 
@@ -112,9 +112,9 @@ var obj2 = {
 obj2.bar(); // obj2对象
 ```
 
-## Ⅲ 显示绑定
+### Ⅲ 显示绑定
 
-### 通过 call 或者 apply 绑定 this 对象
+#### 通过 call 或者 apply 绑定 this 对象
 
 call 和 apply 在执行函数时可以明确指定需要绑定的 this。
 
@@ -136,7 +136,7 @@ sum.call('call', 20, 30, 40); // 90 [String: 'call'](包装类对象)
 sum.apply('apply', [20, 30, 40]); // 90 [String: 'apply'](包装类对象)
 ```
 
-### 通过 bind 绑定 this 对象
+#### 通过 bind 绑定 this 对象
 
 返回一个新的函数，该函数总是显示地绑定到一个对象上。
 
@@ -152,7 +152,7 @@ console.log(bar === foo); // true
 console.log(newFoo === foo); // false
 ```
 
-## Ⅳ new 绑定
+### Ⅳ new 绑定
 
 1. 创建一个全新的对象
 2. 该对象会被执行`prototype`连接
@@ -170,9 +170,9 @@ var obj2 = new Person('test2', 2);
 console.log(obj2.name, obj2.age); // test2 2
 ```
 
-# 某些特殊函数中的 this 绑定
+## 某些特殊函数中的 this 绑定
 
-## setTimeout
+### setTimeout
 
 ```javascript
 // setTimeout 在内部进行函数回调时采用的是独立函数调用，在严格模式下也是 window
@@ -181,7 +181,7 @@ setTimeout(function () {
 }, 1000);
 ```
 
-## 事件监听点击
+### 事件监听点击
 
 ```javascript
 const app = document.querySelector('.app');
@@ -193,7 +193,7 @@ app.addEventListener('click', function () {
 });
 ```
 
-## 数组高阶函数（forEach/map/filter/find...）
+### 数组高阶函数（forEach/map/filter/find...）
 
 ```javascript
 var list = ['a', 'b', 'c'];
@@ -205,7 +205,7 @@ list.forEach(function () {
 }, 'test');
 ```
 
-# 规则优先级
+## 规则优先级
 
 `new 绑定 > 显示绑定(apply/call/bind) > 隐式绑定 > 默认绑定`。
 
@@ -268,9 +268,9 @@ f.apply('apply'); // [String: 'bind']
 f.call('call'); // [String: 'bind']
 ```
 
-# 特殊绑定
+## 特殊绑定
 
-## 忽略显示绑定
+### 忽略显示绑定
 
 ```javascript
 function foo() {
@@ -286,7 +286,7 @@ var bar = foo.bind(null);
 bar(); // window
 ```
 
-## 间接函数引用
+### 间接函数引用
 
 ```javascript
 // 使用默认绑定规则
@@ -304,7 +304,7 @@ var obj2 = {
 (obj2.bar = obj1.foo)(); // window
 ```
 
-# 箭头函数中 this 的绑定
+## 箭头函数中 this 的绑定
 
 箭头函数不绑定 this，根据外层作用域来确定 this 的指向。
 
