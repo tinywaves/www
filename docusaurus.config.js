@@ -21,7 +21,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'zh-Hans',
-    locales: ['zh-Hans', 'en'],
+    locales: ['zh-Hans', 'en']
   },
   presets: [
     [
@@ -33,13 +33,13 @@ const config = {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: 'https://github.com/tinyRipple/website/blob/main/',
+          editUrl: 'https://github.com/tinyRipple/website/blob/main/'
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      }),
-    ],
+          customCss: require.resolve('./src/css/custom.css')
+        }
+      })
+    ]
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
@@ -48,28 +48,29 @@ const config = {
         title: "tinyRipple's Website",
         logo: {
           alt: "tinyRipple's Website avatar",
-          src: 'img/avatar.png',
+          src: 'img/avatar.png'
         },
         items: [
           { type: 'search', position: 'left' },
-          { to: '/blog', label: 'Blog', position: 'right' },
+          { to: '/blog', label: 'Blogs', position: 'right' },
           {
             href: 'https://github.com/tinyRipple/website',
             position: 'right',
-            className: 'header-github-link',
-          },
-        ],
+            className: 'header-github-link'
+          }
+        ]
       },
       prism: {
         theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        darkTheme: darkCodeTheme
       },
       algolia: {
         appId: 'BX6IW2IRH9',
         apiKey: '6d0c92a974f223f4a8d10d560e0ee951',
-        indexName: 'web-dzh',
-      },
+        indexName: 'web-dzh'
+      }
     }),
+  plugins: ['./plugins/postcss-tailwind-loader.js']
 };
 
 module.exports = config;

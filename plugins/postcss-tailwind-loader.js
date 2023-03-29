@@ -1,0 +1,12 @@
+module.exports = () => ({
+  name: 'postcss-tailwindcss-loader',
+  configurePostCss(postcssOptions) {
+    postcssOptions.plugins.push(
+      require('postcss-import'),
+      require('tailwindcss'),
+      require('postcss-nested'),
+      require('autoprefixer')
+    );
+    return postcssOptions;
+  }
+});
