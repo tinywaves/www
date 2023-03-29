@@ -1,6 +1,6 @@
 ---
-slug: javascript-this
-title: JavaScript 的 this 指向
+slug: javascript-this-arrow-function
+title: JavaScript 的 this 指向和箭头函数
 authors: [dzh]
 tags: [JavaScript]
 ---
@@ -9,7 +9,7 @@ tags: [JavaScript]
 
 在`浏览器环境`下，全局下的 this 绑定`window`，在`Node 环境`下，全局下的 this 绑定一个空对象`{}`。
 
-## 在普通函数中 this 的绑定规则
+## 普通函数中 this 的绑定规则
 
 this 是`动态绑定`的，即在`函数运行时`才能确定 this 的指向，与 this`出现的位置没有关系`，因此在`编译时不能确定 this 的指向`。
 
@@ -193,7 +193,7 @@ app.addEventListener('click', function () {
 });
 ```
 
-### 数组高阶函数（forEach/map/filter/find...）
+### forEach
 
 ```javascript
 var list = ['a', 'b', 'c'];
@@ -304,11 +304,20 @@ var obj2 = {
 (obj2.bar = obj1.foo)(); // window
 ```
 
-## 箭头函数中 this 的绑定
+## 箭头函数
 
-箭头函数不绑定 this，根据外层作用域来确定 this 的指向。
+### 箭头函数的特性
+
+- 箭头函数不会绑定 this
+- 箭头函数不具有 arguments
+- 箭头函数不能作为构造函数，即不能 new，因为它不具有原型，会抛出错误
+
+### 箭头函数中 this 的绑定
+
+在普通函数中具有 this 标识符，而箭头函数不绑定 this，即箭头函数中根本没有 this，因为自己的作用域内不存在 this，那么就会向外层查找 this，因此 this 根据外层作用域来确定 this 的指向。
 
 ```javascript
+// 案例1
 var foo = () => {
   console.log(this);
 };
@@ -316,4 +325,71 @@ foo(); // window
 var obj = { foo: foo };
 obj.foo(); // window
 foo.call('call'); // window
+
+// 案例2
+const obj = {
+  foo: function () {
+    const bar = () => {
+      console.log(this);
+    };
+    return bar;
+  }
+};
+const fn = obj.foo();
+fn.apply('apply'); // obj对象
+
+// 案例3
+const obj = {
+  foo: () => {
+    const bar = () => {
+      console.log(this);
+    };
+    return bar;
+  }
+};
+const fn = obj.foo();
+fn.apply('apply'); // window
+```
+
+### 应用
+
+- 普通函数的写法
+
+```javascript
+const request = (callback) => {
+  const data = ['aaa', 'bbb', 'ccc'];
+  callback(data);
+};
+
+const obj = {
+  names: [],
+  network: function () {
+    const _this = this;
+    request(function (res) {
+      _this.names = res;
+    });
+  }
+};
+
+obj.network();
+```
+
+- 箭头函数的写法
+
+```javascript
+const request = (callback) => {
+  const data = ['aaa', 'bbb', 'ccc'];
+  callback(data);
+};
+
+const obj = {
+  names: [],
+  network: function () {
+    request((res) => {
+      this.names = res;
+    });
+  }
+};
+
+obj.network();
 ```
