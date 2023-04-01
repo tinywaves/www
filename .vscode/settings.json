@@ -1,4 +1,10 @@
 {
-  "cSpell.words": ["clsx", "Infima", "nocheck", "Csvg"],
+  "cSpell.words": [
+    "clsx",
+    "Csvg",
+    "ECONNREFUSED",
+    "Infima",
+    "nocheck"
+  ],
   "eslint.packageManager": "pnpm"
 }
