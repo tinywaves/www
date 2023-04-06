@@ -52,6 +52,7 @@ const config = {
         },
         items: [
           { type: 'search', position: 'left' },
+          { to: '/projects', label: 'Projects', position: 'right' },
           { to: '/blog', label: 'Blogs', position: 'right' },
           {
             href: 'https://github.com/tinyRipple/website',
