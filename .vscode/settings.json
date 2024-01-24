@@ -13,5 +13,6 @@
 		"astro", // Enable .astro
 		"typescript", // Enable .ts
 		"typescriptreact"
-	]
+	],
+	"cSpell.words": ["noopener", "noreferrer"]
 }
