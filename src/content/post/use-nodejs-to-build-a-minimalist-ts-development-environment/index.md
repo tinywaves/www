@@ -2,7 +2,7 @@
 title: "Use Node.js to build a minimalist TS development environment"
 publishDate: "24 Jan 2024"
 description: "Use Node.js to build a minimalist TS development environment"
-tags: ["TypeScript"]
+tags: ["typescript"]
 ---
 
 ## Install `@types/node`
@@ -59,4 +59,4 @@ console.log("test");
 console.log("test");
 ```
 
-![](./images/ts-env.png)
+![ts-env](./images/ts-env.png)
