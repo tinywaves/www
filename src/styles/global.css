@@ -34,5 +34,5 @@
 }
 
 pre.astro-code code span.line {
-	text-wrap: nowrap;
+	white-space: pre;
 }
