@@ -13,7 +13,7 @@ interface Props {
 const { post } = Astro.props;
 const {
 	data: { title, description, ogImage, publishDate, updatedDate },
-	slug,
+	slug
 } = post;
 const socialImage = ogImage ?? `/og-image/${slug}.png`;
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
@@ -26,7 +26,7 @@ const { headings } = await post.render();
 		<article class="flex-grow break-words" data-pagefind-body>
 			<div id="blog-hero"><BlogHero content={post} /></div>
 			<div
-				class="prose prose-sm prose-cactus mt-12 prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-accent prose-headings:before:content-['#'] prose-th:before:content-none"
+				class="prose prose-sm prose-cactus mt-12 max-w-[85ch] prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-accent prose-headings:before:content-['#'] prose-th:before:content-none"
 			>
 				<slot />
 				<WebMentions />
