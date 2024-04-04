@@ -1,10 +1,10 @@
-import type { APIContext, GetStaticPaths } from "astro";
-import { getEntryBySlug } from "astro:content";
+import type { APIContext, InferGetStaticPropsType } from "astro";
 import satori, { type SatoriOptions } from "satori";
 import { html } from "satori-html";
 import { Resvg } from "@resvg/resvg-js";
 import { siteConfig } from "@/site-config";
-import { getAllPosts, getFormattedDate } from "@/utils";
+import { getFormattedDate } from "@/utils";
+import { getAllPosts } from "@/data/post";
 
 import RobotoMono from "@/assets/roboto-mono-regular.ttf";
 import RobotoMonoBold from "@/assets/roboto-mono-700.ttf";
@@ -58,16 +58,15 @@ const markup = (title: string, pubDate: string) =>
 		</div>
 	</div>`;
 
-export async function GET({ params: { slug } }: APIContext) {
-	const post = await getEntryBySlug("post", slug!);
-	const title = post?.data.title ?? siteConfig.title;
-	const postDate = getFormattedDate(
-		post?.data.updatedDate ?? post?.data.publishDate ?? Date.now(),
-		{
-			weekday: "long",
-			month: "long",
-		},
-	);
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+export async function GET(context: APIContext) {
+	const { title, pubDate } = context.props as Props;
+
+	const postDate = getFormattedDate(pubDate, {
+		weekday: "long",
+		month: "long",
+	});
 	const svg = await satori(markup(title, postDate), ogOptions);
 	const png = new Resvg(svg).render().asPng();
 	return new Response(png, {
@@ -78,7 +77,15 @@ export async function GET({ params: { slug } }: APIContext) {
 	});
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export async function getStaticPaths() {
 	const posts = await getAllPosts();
-	return posts.filter(({ data }) => !data.ogImage).map(({ slug }) => ({ params: { slug } }));
-};
+	return posts
+		.filter(({ data }) => !data.ogImage)
+		.map((post) => ({
+			params: { slug: post.slug },
+			props: {
+				title: post.data.title,
+				pubDate: post.data.updatedDate ?? post.data.publishDate,
+			},
+		}));
+}
