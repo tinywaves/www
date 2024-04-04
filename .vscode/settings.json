@@ -20,6 +20,7 @@
 		"editor.defaultFormatter": "astro-build.astro-vscode"
 	},
 	"cSpell.words": [
-		"Consolas"
+		"Consolas",
+		"nbsp"
 	]
 }

@@ -1,5 +1,6 @@
 export type SiteConfig = {
 	author: string;
+	nickname: string;
 	title: string;
 	description: string;
 	lang: string;
