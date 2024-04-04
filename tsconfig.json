@@ -12,16 +12,16 @@
         "src/assets/*"
       ],
       "@/components/*": [
-        "src/components/*.astro"
+        "src/components/*"
+      ],
+      "@/data/*": [
+        "src/data/*"
       ],
       "@/layouts/*": [
-        "src/layouts/*.astro"
+        "src/layouts/*"
       ],
       "@/utils": [
         "src/utils/index.ts"
-      ],
-      "@/stores/*": [
-        "src/stores/*"
       ],
       "@/types": [
         "src/types.ts"
@@ -31,10 +31,6 @@
       ]
     }
   },
-  "include": [
-    "src",
-    "*.ts"
-  ],
   "exclude": [
     "node_modules",
     "**/node_modules/*",
