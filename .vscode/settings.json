@@ -18,5 +18,8 @@
 	],
 	"[astro]": {
 		"editor.defaultFormatter": "astro-build.astro-vscode"
-	}
+	},
+	"cSpell.words": [
+		"Consolas"
+	]
 }
