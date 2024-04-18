@@ -26,10 +26,6 @@ const themeConfig: NextraBlogTheme = {
       url: 'https://github.com/eastonzh',
       name: 'Github',
     },
-    {
-      url: '/feed.xml',
-      name: 'RSS',
-    },
   ],
   readMore: 'Read More',
   darkMode: true,
