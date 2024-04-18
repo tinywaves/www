@@ -3,16 +3,18 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3333",
-    "build": "next build",
+    "build": "next build && node ./scripts/generate-rss.js",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "gray-matter": "^4.0.3",
     "next": "14.2.1",
     "nextra": "^2.13.4",
     "nextra-theme-blog": "^2.13.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "rss": "^1.2.2"
   },
   "devDependencies": {
     "@dhzh/eslint-config": "^0.2.3",
