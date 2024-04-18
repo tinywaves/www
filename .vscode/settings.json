@@ -95,5 +95,10 @@
   },
   "[astro]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  }
+  },
+  "cSpell.words": [
+    "navs",
+    "nextjs",
+    "nextra"
+  ]
 }
