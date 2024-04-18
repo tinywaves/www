@@ -5,3 +5,7 @@ This is a [`Next.js`](https://nextjs.org/) based personal blog with [`nextra`](h
 ```bash
 pnpm dev
 ```
+
+## Todo
+
+[ ] RSS Generate
