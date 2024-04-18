@@ -8,4 +8,4 @@ pnpm dev
 
 ## Todo
 
-[ ] RSS Generate
+- RSS Generate
