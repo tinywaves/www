@@ -16,6 +16,6 @@
     "isolatedModules": true,
     "skipLibCheck": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/index.tsxmdx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/index.mdx"],
   "exclude": ["node_modules"]
 }
