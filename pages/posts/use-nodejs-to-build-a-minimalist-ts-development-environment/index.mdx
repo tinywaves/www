@@ -25,9 +25,9 @@ Use `ts-node-dev` to implement ts file execution and content change monitoring.
 pnpm add ts-node-dev -D
 ```
 
-## `package.json`
+## configs
 
-```json
+```json filename="package.json"
 {
   "devDependencies": {
     "@types/node": "^20.11.5",
@@ -40,9 +40,7 @@ pnpm add ts-node-dev -D
 }
 ```
 
-## `tsconfig.json`
-
-```json
+```json filename="tsconfig.json"
 {
   "compilerOptions": {
     "target": "ES2015", // target version of ECMAScript
@@ -56,8 +54,7 @@ pnpm add ts-node-dev -D
 
 ## test
 
-```ts
-// src/index.ts
+```ts filename="src/index.ts"
 console.log("test");
 console.log("test");
 ```
