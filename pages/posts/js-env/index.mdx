@@ -1,0 +1,23 @@
+---
+title: "JS 的执行和环境"
+description: ""
+tag: JavaScript
+author: Easton Zheng
+date: 2024-04-23
+type: post
+---
+
+在 JS 的执行过程中, 都会创建一个执行上下文 (Execution Context, EC) 和执行栈 (Execution Context Stack).
+
+```js
+function foo() {}
+foo();
+```
+
+上述的代码在执行时会创建出两个执行环境, 即全局执行环境和 `foo` 函数的执行环境.
+
+![](./(images)/ecs.svg)
+
+而在不同的 ES 标准中创建执行上下文是不同的.
+
+
