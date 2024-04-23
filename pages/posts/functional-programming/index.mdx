@@ -1,0 +1,231 @@
+---
+title: "函数式编程"
+description: "函数柯里化和函数组合"
+tag: JavaScript
+author: Easton Zheng
+date: 2024/04/23
+type: post
+---
+
+# 函数柯里化
+
+- 在计算机科学中, 柯里化 (Currying), 又译为卡瑞化或加里化
+- 柯里化是把接收多个参数的函数, 变成接受一个单一参数 (最初函数的第一个参数) 的函数, 并且返回接受余下的参数, 而且返回结果的新函数的技术
+- 柯里化声称: 如果你固定某些参数, 你将得到接受余下参数的一个函数
+- 即只传递给函数一部分参数来调用它, 让它返回一个函数去处理剩余的参数, 这个过程就称之为柯里化
+
+举一个例子:
+
+```js
+// 传入三个参数,返回三数之和
+function add(x, y, z) {
+  return x + y + z
+}
+console.log(add(10, 20, 30)) // 60
+```
+
+可以对上述函数进行柯里化:
+
+```js
+function sum(x) {
+  return function(y) {
+    return function(z) {
+      return x + y + z
+    }
+  }
+}
+// 因为闭包的缘故,所以在内部作用域可以访问外部作用域中的变量
+console.log(sum(10)(20)(30))
+
+// 简化柯里化过程
+const sum = x => y => z => x + y + z
+console.log(sum3(10)(20)(30)) // 60
+```
+
+## 柯里化让函数的职责单一
+
+在函数式编程中往往希望一个函数处理的问题尽可能的单一, 而不是将一大堆的处理过程交给一个函数来处理. 因此将每次传入的参数在单一的函数中进行处理, 处理完后在下一个函数中再使用处理后的结果的效果就可以使用柯里化来实现.
+
+```js
+// result = (x + 2) + (y * 2) + (z * z)
+function add(x, y, z) {
+  x = x + 2
+  y = y * 2
+  z = z * z
+  return x + y + z
+}
+console.log(add(10, 20, 30)) // 952
+
+// 柯里化
+function sum(x) {
+  x = x + 2
+  return function(y) {
+    y = y * 2
+    return function(z) {
+      z = z * z
+      return function() {
+        return x + y + z
+      }
+    }
+  }
+}
+console.log(sum(10)(20)(30)()) // 952
+```
+
+## 柯里化复用参数逻辑 (定制函数)
+
+```js
+/*
+定制一个和某一固定数值相加的函数
+*/
+// 未柯里化
+function add(count, num) {
+  return count + num
+}
+add(5, 10) // 15 = 5 + 10
+add(5, 23) // 28 = 5 + 23
+
+// 柯里化
+function makeAdder(count) {
+  return function(num) {
+    return count + num
+  }
+}
+// 5 + x
+const adder5 = makeAdder(5)
+// 10 + x
+const adder10 = makeAdder(10)
+adder5(10) // 15 = 10 + 5
+adder5(14) // 19 = 14 + 5
+adder10(20) // 30 = 20 + 10
+adder10(25) // 35 = 25 + 10
+```
+
+```js
+/*
+打印日志信息:[日期][日志种类]:[具体信息]
+*/
+// 未柯里化
+function log(date, type, message) {
+  console.log(`[${date.getHours()}:${date.getMinutes()}][${type}]:[${message}]`)
+}
+log(new Date(), "DEBUG", "bug1") // [22:22][DEBUG]:[bug1]
+log(new Date(), "DEBUG", "bug2") // [22:22][DEBUG]:[bug2]
+log(new Date(), "DEBUG", "bug3") // [22:22][DEBUG]:[bug3]
+
+// 柯里化
+const log = date => type => message => {
+  console.log(`[${date.getHours()}:${date.getMinutes()}][${type}]:[${message}]`)
+}
+// 定制一个当前时间日志函数
+const nowLog = log(new Date())
+nowLog("DEBUG")("debug") // [22:22][DEBUG]:[debug]
+nowLog("FEATURE")("feature") // [22:22][FEATURE]:[feature]
+// 定制一个当前时间的DEBUG日志函数
+const nowDebugLog = log(new Date())("DEBUG")
+nowDebugLog("debug1") // [22:22][DEBUG]:[debug1]
+nowDebugLog("debug2") // [22:22][DEBUG]:[debug2]
+// 定制一个当前时间的FEATURE日志函数
+const nowFeatureLog = log(new Date())("FEATURE")
+nowFeatureLog("feature1") // [22:22][FEATURE]:[feature1]
+nowFeatureLog("feature2") // [22:22][FEATURE]:[feature2]
+```
+
+## 自动柯里化函数的实现
+
+```js
+/**
+ * 自动柯里化函数的实现
+ * @param {Function} fn 
+ * @returns 返回一个已柯里化函数
+ */
+function zdhCurrying(fn) {
+  /**
+   * 待返回的已柯里化函数
+   * @param  {...any} args 传入的参数
+   * @returns 返回已柯里化函数
+   */
+  function curried(...args) {
+    // 执行时判断当前已经接收的参数的个数和参数本身需要接收的参数是否已经一致
+    // 若已经传入的参数大于等于需要的参数时直接执行函数
+    if (args.length >= fn.length) {
+      // 给fn绑定上执行curried时的this
+      return fn.apply(this, args)
+    } else {
+      // 若还没有达到个数时需要返回一个新的函数用于继续接收参数
+      /**
+       * 接收剩余参数的函数
+       * @param  {...any} argsTemp 剩余参数
+       * @returns 返回接收剩余参数的函数
+       */
+      function curriedTemp(...argsTemp) {
+        // 接收到参数后递归调用curried来检查参数的个数是否达到
+        return curried.apply(this, args.concat(argsTemp))
+      }
+      return curriedTemp
+    }
+  }
+  return curried
+}
+```
+
+# 组合函数
+
+组合 (Compose) 函数是在 JavaScript 开发过程中一种对函数的使用技巧和使用模式: 当需要对某一个数据进行函数的调用, 执行两个函数 fn1 和 fn2, 这两个函数是依次执行的, 那么如果每次都需要进行两个函数的调用, 操作上就会显得重复. 将这两个函数组合起来, 自动依次调用的过程就是对函数的组合, 称之为组合函数 (Compose Function).
+
+```js
+// 未组合化
+// num * 2
+function double(num) {
+  return num * 2
+}
+// num * num
+function square(num) {
+  return num ** 2
+}
+console.log(square(double(10))) // 400
+
+// 组合化函数
+function composeFunction(fn1, fn2) {
+  return function(number) {
+    return fn1(fn2(number))
+  }
+}
+const newFunction = composeFunction(double, square)
+console.log(newFunction(10)) // 400
+```
+
+## 通用组合函数的实现
+
+```js
+/**
+ * 通用组函数的实现
+ * @param  {...any} fns 传入的待组合的函数
+ * @returns 返回一个组合函数
+ */
+function zdhCompose(...fns) {
+  // 获取传入参数的个数
+  const length = fns.length
+  // 对传入参数进行判断,若非函数则抛出异常
+  for (let i = 0; i < length; i++) {
+    if (typeof fns[i] !== 'function') {
+      throw new TypeError('Expected arguments are functions')
+    }
+  }
+  /**
+   * 组合函数
+   * @param  {...any} args
+   * @returns 返回执行结果
+   */
+  return function (...args) {
+    // 标记当前待执行函数
+    let index = 0
+    // 执行结果
+    let result = length ? fns[index].apply(this, args) : args
+    while (++index < length) {
+      result = fns[index].call(this, result)
+    }
+    return result
+  }
+}
+```
