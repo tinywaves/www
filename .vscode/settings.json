@@ -99,9 +99,12 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "cSpell.words": [
+    "giscus",
     "katex",
+    "kbar",
     "nextjs",
     "rehype",
-    "svgr"
+    "svgr",
+    "umami"
   ]
 }
