@@ -1,14 +1,39 @@
 {
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  // Entry
   "eslint.format.enable": true,
   "eslint.ignoreUntitled": true,
   "eslint.enable": true,
+
+  // Enable the ESlint flat config support
   "eslint.experimental.useFlatConfig": true,
+
+  // Disable the default formatter, use eslint instead
   "prettier.enable": false,
   "editor.formatOnSave": false,
+
+  // Auto fix
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "never"
   },
+
+  // Silent the stylistic rules in you IDE, but still auto fix them
+  // "eslint.rules.customizations": [
+  //   { "rule": "style/*", "severity": "off" },
+  //   { "rule": "format/*", "severity": "off" },
+  //   { "rule": "*-indent", "severity": "off" },
+  //   { "rule": "*-spacing", "severity": "off" },
+  //   { "rule": "*-spaces", "severity": "off" },
+  //   { "rule": "*-order", "severity": "off" },
+  //   { "rule": "*-dangle", "severity": "off" },
+  //   { "rule": "*-newline", "severity": "off" },
+  //   { "rule": "*quotes", "severity": "off" },
+  //   { "rule": "*semi", "severity": "off" }
+  // ],
+
+  // Enable eslint for all supported languages
   "eslint.validate": [
     "javascript",
     "javascriptreact",
@@ -26,6 +51,8 @@
     "less",
     "scss"
   ],
+
+  // Enable eslint as the default formatter
   "[javascript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
@@ -72,8 +99,14 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "cSpell.words": [
-    "navs",
+    "favicons",
+    "giscus",
+    "katex",
+    "kbar",
+    "msapplication",
     "nextjs",
-    "nextra"
+    "rehype",
+    "svgr",
+    "umami"
   ]
 }
