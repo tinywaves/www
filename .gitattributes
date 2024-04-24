@@ -195,7 +195,7 @@ Procfile          text
 *.exe             binary
 *.pyc             binary
 
-# RC files (like .babelrc or .eslintrc)
+# RC files (like .babelrc)
 *.*rc             text
 
 # Ignore files (like .npmignore or .gitignore)
