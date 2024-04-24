@@ -99,6 +99,7 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "cSpell.words": [
+    "favicons",
     "giscus",
     "katex",
     "kbar",
