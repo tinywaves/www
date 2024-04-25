@@ -1,5 +1,5 @@
 import 'css/prism.css';
-import 'css/search.css';
+import 'css/post.css';
 import 'katex/dist/katex.css';
 
 import { MDXLayoutRenderer } from 'pliny/mdx-components';
