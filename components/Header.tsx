@@ -2,7 +2,7 @@ import Link from './Link';
 import MobileNav from './MobileNav';
 import ThemeSwitch from './ThemeSwitch';
 import SearchButton from './SearchButton';
-import headerNavLinks from '@/data/headerNavLinks';
+import headerNavLinks from '@/data/header-nav-links';
 import siteMetadata from '@/data/siteMetadata';
 
 const Header = () => {
