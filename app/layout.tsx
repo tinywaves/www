@@ -1,21 +1,27 @@
 import 'css/tailwind.css';
 import 'pliny/search/algolia.css';
-import { Space_Grotesk } from 'next/font/google';
 import type { AnalyticsConfig } from 'pliny/analytics';
 import { Analytics } from 'pliny/analytics';
 import type { SearchConfig } from 'pliny/search';
 import { SearchProvider } from 'pliny/search';
 import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import { ThemeProviders } from './theme-providers';
 import Header from '@/components/Header';
 import SectionContainer from '@/components/SectionContainer';
 import Footer from '@/components/Footer';
 import siteMetadata from '@/data/siteMetadata';
 
-const space_grotesk = Space_Grotesk({
-  subsets: ['latin'],
+const space_grotesk = localFont({
+  src: '../public/fonts/SpaceGrotesk-VariableFont_wght.ttf',
   display: 'swap',
   variable: '--font-space-grotesk',
+});
+
+const noto_sans_sc = localFont({
+  src: '../public/fonts/NotoSansSC-VariableFont_wght.ttf',
+  display: 'swap',
+  variable: '--font-noto-sans-sc',
 });
 
 export const metadata: Metadata = {
@@ -62,7 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={siteMetadata.language}
-      className={`${space_grotesk.variable} scroll-smooth`}
+      className={`${space_grotesk.variable} ${noto_sans_sc.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <link rel="apple-touch-icon" sizes="76x76" href="/static/favicons/apple-touch-icon.png" />
