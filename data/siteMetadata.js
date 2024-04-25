@@ -58,11 +58,9 @@ const siteMetadata = {
     },
   },
   search: {
-    provider: 'algolia',
-    algoliaConfig: {
-      appId: '5I7V4TKO8G', // Application ID
-      apiKey: '050d2e3dc5dd2291bba2ff3a93663f05', // Search-Only API Key
-      indexName: 'tinywaves',
+    provider: 'kbar',
+    kbarConfig: {
+      searchDocumentsPath: 'search.json',
     },
   },
 };
