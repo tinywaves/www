@@ -1,0 +1,773 @@
+---
+title: JavaScript 的模块化
+summary: 总结了 JavaScript 的模块化, 包括 CommonJS、AMD、CMD、ES6 Module 等.
+date: '2024-04-26'
+tags: [javascript]
+draft: false
+layout: PostSimple
+---
+
+<TOCInline toc={props.toc} />
+
+# 模块化的定义
+
+模块化开发的最终的目是将程序划分成一个个不同的结构 (模块), 每个结构编写属于自己的逻辑代码, 有自己的作用域,
+不会影响到其他的结构, 每个结构可以暴露希望暴露的变量、函数、对象等导出给其他结构使用, 也可以通过某种方式,
+导入其他结构的变量、函数、对象等. 按照这种结构划分开发程序的过程, 就是模块化开发的过程.
+
+# 模块化的历史
+
+## 网页开发早期
+
+JavaScript 作者 Brendan Eich 在开发 JavaScript 时仅仅是将 JavaScript 作为一种脚本语言来使用,
+做简单的表单验证或动画实现等功能, 代码量少, 只需要将 JavaScript 代码写到 `<script>` 标签中即可,
+并没有多文件编写的必要.
+
+## 前端和 JavaScript 快速发展
+
+JS 代码变得越来越复杂: Ajax 的出现, 开始出现前后端分离的开发方式, 意味着后端返回数据后需要通过 JS 进行前端页面的渲染;
+SPA 的出现, 前端页面变得更加复杂, 包括前端路由、状态管理等一系列复杂需求需要通过 JavaScript 进行实现;
+包括 Node.js 的实现, JS 可以编写复杂的后端程序, 没有模块化很明显是不实际的.
+JavaScript 在 ES6 (ES2015) 推出了 ES Module 模块化方案, 在此之前, 为了让 JavaScript 支持模块化,
+社区中存在不同的模块化规范: AMD、CMD、CommonJS 等.
+
+# 没有模块化带来的问题
+
+## 命名冲突问题
+
+```js:a/index.js
+var name = 'ZDH'
+var id = 1
+var flag = true
+```
+
+```js:a/a.js
+if (flag) {
+  console.log(name)
+} else {
+  console.log(id)
+}
+```
+
+```js:b/index.js
+var name = 'tinyRipple'
+var id = 2
+var flag = false
+```
+
+```html:index.html
+<body>
+  <script src="./a/index.js"></script>
+  <script src="./b/index.js"></script>
+  <script src="./a/a.js"></script>
+</body>
+```
+
+最后打印结果是 2. a/a.js 中的处理逻辑是对 a/index.js 的数据信息进行处理, 本应当打印 ZDH,
+但是因为 index.html 的引用顺序, b/index.js 中的同名数据对 a/index.js 进行了覆盖, 导致了打印错误, 即命名冲突问题.
+
+## 解决方案
+
+使用立即函数调用表达式 (IIFE, Immediately Invoked Function Expression).
+
+```js:a/index.js
+var moduleA = (function () {
+  // 函数拥有作用域
+  var name = 'ZDH'
+  var id = 1
+  var flag = true
+  return {
+    name: name,
+    id: id,
+    flag: flag
+  }
+})()
+```
+
+```js:a/a.js
+if (moduleA.flag) {
+  console.log(moduleA.name)
+} else {
+  console.log(moduleA.id)
+}
+```
+
+```js:b/index.js
+var moduleB = (function () {
+  var name = 'tinyRipple'
+  var id = 2
+  var flag = false
+  return {
+    name: name,
+    id: id,
+    flag: flag
+  }
+})()
+```
+
+这种解决方案其实带来了新的问题, 即实现过于简单, 并且没有规范:
+
+1. 开发人员必须记录每一个模块中返回的对象的命名才能在其他模块中正确使用, 增加记忆成本
+2. 代码混乱, 每个文件中的代码都需要包裹在一个匿名函数中
+3. 在没有合适的规范约束下, 每个开发人员、每个公司都可能会出现随意命名的情况, 甚至出现模块名称相同的情况,
+需要制定一定的规范来约束每个人都按照这个规范去编写模块化的代码
+4. 每个 JS 文件都通过 script 标签加载, 会导致多次请求
+5. 若在 moduleB 中需要使用 moduleA 则需要将 moduleA 传入 moduleB 的 IIFE,
+因此这样就要求 moduleA 的script 标签必须在 moduleB 引入之前引入. 使用 IIFE 无法明确知道模块之间的依赖关系,
+因此也就容易导致加载顺序出错.
+6. 以上种种都招致了难以维护.
+
+# 模块化规范
+
+## CommonJS
+
+### CommonJS 和 Node.js 的关系
+
+CommonJS 是一个**规范**, 最初提出来是在浏览器以外的地方进行使用, 并且被命名为 ServerJS, 后来为了体现其广泛性,
+修改为 CommonJS, 简称 CJS.
+
+- CommonJS **是一个规范, 而不是具体实现**, Node.js 是 CommonJS 在服务器端一个具有代表性的实现,
+采用的是同步加载的方式
+- Browserify 是 CommonJS 在浏览器端的一种实现, 采用的是异步加载的方式
+- webpack 具备对 CommonJS 的支持和转换
+- 在 Node.js 中每一个 js 文件都是一个单独的模块, 模块中包括 CommonJS 规范的核心变量:
+exports、module.exports、require, 使用这些变量进行模块化开发更加方便:
+exports 和 module.exports 负责对模块中内容的导出,
+require 负责导入其他模块 (自定义模块、系统模块、第三方库模块) 中的内容
+- 模块加载多次则只会第一次时执行一次,后续将会采用缓存
+- 模块加载顺序与代码书写顺序一致
+
+### module.exports
+
+```js:temp.js
+const name = 'tinyRipple'
+const id = 1
+
+function foo(number1, number2) {
+  return number1 + number2
+}
+
+// 导出
+// module.exports.name = name
+// module.exports.id = id
+// module.exports.foo = foo
+module.exports = {
+  name,
+  id,
+  foo
+}
+```
+
+```js:main.js
+// 导入
+// const object = require('./temp.js')
+// console.log(object.name) // tinyRipple
+// console.log(object.id) // 1
+// console.log(object.foo(10, 20)) // 30
+
+// 解构导入
+const { name, id, foo } = require('./temp.js')
+console.log(name) // tinyRipple
+console.log(id) // 1
+console.log(foo(10, 20)) // 30
+```
+
+### CommonJS 的原理
+
+![](/blog-assets/JavaScript%20的模块化/Snipaste_2021-11-17_14-33-16.jpg)
+
+可以发现导出的对象和导入的对象其实是同一个对象.
+
+```js:temp.js
+const foo = {
+  name: 'tinyRipple',
+  id: 1,
+  foo: function (number1, number2) {
+    return number1 + number2
+  }
+}
+
+// 1000ms后修改id为1000
+setTimeout(() => {
+  foo.id = 1000
+}, 1000)
+
+module.exports = foo
+```
+
+```js:mian.js
+const object = require('./temp.js')
+console.log(object.name) // tinyRipple
+console.log(object.id) // 1
+console.log(object.foo(10, 20)) // 30
+
+// 2000ms后能打印出修改后的id值
+setTimeout(() => {
+  console.log(object.id) // 1000
+}, 2000)
+```
+
+这里需要注意的是: commonjs 的机制是, 被输入的模块是输出模块的一个值的拷贝,
+因此上述中输入的 object 拷贝了输出 foo 的对象引用地址, 因此两者指向了同一块内存空间, 内部的 id 发生了改变.
+如果这里不使用对象而是基本数据类型,值就不会发生改变了.
+
+```js:temp.js
+let value = 1;
+
+setTimeout(() => {
+  value = 2;
+}, 1000);
+
+module.exports = value;
+```
+
+```js:main.js
+const value = require('./temp.js')
+console.log(value) // 1
+
+setTimeout(() => {
+  console.log(value) // 1
+}, 2000)
+```
+
+### exports
+
+```js:temp.js
+const name = 'tinyRipple'
+const id = 1
+const foo = function (number1, number2) {
+  return number1 + number2
+}
+
+exports.name = name
+exports.id = id
+exports.foo = foo
+```
+
+```js:main.js
+const object = require('./temp.js')
+console.log(object.name) // tinyRipple
+console.log(object.id) // 1
+console.log(object.foo(10, 20)) // 30
+```
+
+### module.exports 和 exports 的关系
+
+为了实现模块的导出, Node.js 中使用的是 Module 类, 每一个模块都是 Module 的一个实例, 即 `module`,
+因此在 CommonJS 中, 真正用于导出的只有 `module.exports`,
+但是 exports 也可以用于导出的原因是 Node.js 的源码对 exports 进行了处理: `exports = module.exports`,
+因此 exports 指向的也是导出的对象. 但是要注意的是:
+exports 的出现是 Node.js 为了支持 CommonJS 规范而推出的一个关键字, 内部原理是 module.exports.
+
+![](/blog-assets/JavaScript%20的模块化/未命名绘图.drawio.png)
+
+同时, exports 和 module.exports 不推荐同时使用, 因为在内部实现中, `exports = module.exports`,
+但是最终模块导出的是 module.exports, 因此如果同时使用, 在某些情况下会导致只有 module.exports 起作用.
+
+```js:只有module.exports起作用
+exports.name = 'tinyRipple'
+// module.exports 被重新赋值, exports 此时和 module.exports 不再指向同一个对象, 最后真正导出的是 module.exports
+module.exports = {
+  name: 'ZDH'
+}
+```
+
+```js:伪代码实现Node.js的模块加载
+(function () {
+  module.exports = {}
+  const exports = module.exports
+  // 模块化代码
+  return module.exports
+})()
+```
+
+### require
+
+[require 的查找规则](https://nodejs.org/docs/latest/api/modules.html#all-together)
+
+require(X):
+
+- X 是一个 Node.js 核心模块, 如 `path`、`http` 等
+  - 直接返回核心模块, 并且停止查找.
+- X 以 `./` 或 `../` 或 `/(本机根目录)` 等路径开头
+  - 第一步: 先将 X 当做一个文件在对应的目录下查找: 如果有后缀名, 按照后缀名的格式查找对应的文件; 如果没有后缀名,
+  会按照直接**查找文件 X —> 查找 X.js 文件 —> 查找 X.json 文件 —> 查找 X.node 文件**的顺序进行查找.
+  - 第二步: 如果没有找到对应的文件, 则将 X 作为一个目录查找目录下面的 index 文件,
+  按照**查找 X/index.js 文件 —> 查找 X/index.json 文件 —> 查找 X/index.node 文件**的顺序进行查找.
+  - 第三步: 如果还是没有找到相应的文件, 则报错: not found.
+- X 不是一个路径, 也不是一个 Node.js 的核心模块
+```js
+console.log(module.paths)
+```
+![](/blog-assets/JavaScript%20的模块化/Snipaste_2021-11-17_22-44-51.jpg)
+
+优先在当前文件夹的 node_modules 文件夹中查找相应文件, 依次往外层查找直至根路径. 如果没有找到, 则报错: not found.
+
+### 模块的加载过程
+
+模块在被第一次引入时, 模块中的 js 代码会被运行一次.
+
+```js:temp.js
+console.log('temp.js')
+```
+
+```js:main.js
+console.log('main.js-start')
+require('./temp')
+console.log('main.js-end')
+```
+
+![](/blog-assets/JavaScript%20的模块化/Snipaste_2021-11-17_22-59-09.jpg)
+
+模块被多次引入时会缓存, 最终只加载 (运行) 一次: 每个模块对象 module 都有一个属性: loaded,
+loaded 为 false 表示还没有被加载, 为 true 表示已经被加载, 当被加载一次后就会将该属性置为 true.
+
+```js:temp.js
+console.log('temp.js')
+```
+
+```js:main.js
+console.log('main.js-start')
+
+require('./temp')
+require('./temp')
+require('./temp')
+
+console.log('main.js-end')
+```
+
+![](/blog-assets/JavaScript%20的模块化/Snipaste_2021-11-17_22-59-09.jpg)
+
+如果存在循环引入, Node.js 采用的加载顺序是深度优先算法: main -> aaa -> ccc -> ddd -> eee -> bbb.
+
+![](/blog-assets/JavaScript%20的模块化/Snipaste_2021-11-17_23-08-58.jpg)
+
+### CommonJS 的缺点
+
+CommonJS 加载模块是**同步**的, 意味着只有等到对应的模块加载完毕后当前模块中的内容才能被运行.
+这种情况在服务器端不会有什么问题, 因为服务器加载的 JS 文件都是本地文件, 加载速度非常快;
+但如果将 CommonJS 应用于浏览器, 浏览器加载 JS 文件需要从服务器将文件下载到本地, 之后再由浏览器加载运行,
+如果采用同步加载的机制在遇到网络阻塞就意味着后续的 JS 模块还未加载到本地, 后续的 JS 代码也不会运行.
+所以在浏览器中通常不会使用 CommonJS 规范.
+
+在 webpack 中使用 CommonJS 是另外一回事, 因为 webpack 其实也是在本地进行运行并对代码进行打包构建,
+webpack 本身会将代码转为浏览器可以直接执行的代码.
+
+在早期为了可以在浏览器中使用模块化, 通常会采用 AMD 规范或 CMD 规范,
+但目前现代浏览器已经支持了 ES6 提出的 ES Module 规范; 另一方面,
+借助于 webpack 等工具可以实现对 CommonJS 或者 ES Module 的转换, 因此目前 AMD 和 CMD 的使用已经很少了.
+
+## AMD
+
+Asynchronous Module Definition (异步模块定义), AMD, 主要应用于浏览器的一种模块化规范, 采用异步加载模块.
+
+AMD 比较具有代表性的实现是 `require.js` 和 `curl.js`.
+
+```text:lib/require.js
+require.js: https://github.com/requirejs/requirejs
+```
+
+```js:src/temp.js
+define(() => {
+  const name = 'tinyRipple'
+  const id = 1
+  const foo = (number1, number2) => {
+    return number1 + number2
+  }
+  // 导出模块
+  return {
+    name,
+    id,
+    foo
+  }
+})
+```
+
+```js:src/main.js
+// 注册模块
+require.config({
+  path: {
+    // 这里的路径是相对于index.html文件
+    temp: './src/temp.js'
+  }
+})
+
+// 加载模块
+require(['temp'], tempExportObject => {
+  console.log(
+    tempExportObject.name,
+    tempExportObject.id,
+    tempExportObject.foo(10, 20)) // tinyRipple 1 30
+})
+```
+
+```html:index.html
+<body>
+  <!-- data-main属性用于定义入口文件 -->
+  <script src="./lib/require.js" data-main="./src/main.js"></script>
+</body>
+```
+
+## CMD
+
+Common Module Definition (通用模块定义), CMD, 主要应用于浏览器的一种模块化规范, 采用异步加载模块,
+同时采用了 CommonJS 的优点.
+
+CMD 比较具有代表性的实现是 `Sea.js`.
+
+```text:lib/require.js
+sea.js: https://github.com/seajs/seajs
+```
+
+```js:src/temp.js
+define((require, exports, module) => {
+  const name = 'ti n y w aves'
+  const id = 1
+  const foo = (number1, number2) => {
+    return number1 + number2
+  }
+  // 导出
+  // exports.name = name
+  // exports.id = id
+  // exports.foo = foo
+  module.exports = {
+    name,
+    id,
+    foo
+  }
+})
+```
+
+```js:src/main.js
+define((require, exports, module) => {
+  // 导入
+  const temp = require('./temp.js') // 同步
+  require.async('./temp.js', function(temp) {}) // 异步
+  console.log(temp.name, temp.id, temp.foo(10, 20)) // tinyRipple 1 30
+})
+```
+
+```html:index.html
+<body>
+  <script src="./lib/sea.js"></script>
+  <script>
+    // 加载入口文件
+    seajs.use('./src/main.js')
+  </script>
+</body>
+```
+
+### AMD 和 CMD 的区别
+
+1. 对于依赖的处理
+   1. AMD 更推崇依赖前置, 提前通过数组声明当前模块需要依赖的模块
+   2. CMD 对于依赖实行就近引入, 使用类 commonjs 的方式在需要时引入模块
+2. 对于模块的导出处理
+   1. AMD 采用返回值的方式
+   2. CMD 采用类 commonjs 的方式使用 module 和 exports
+
+## ES Module
+
+ES Module 采用编译期的静态分析, 并且也加入了动态引用的方式; ES Module 模块采用 export 和 import 关键字实现模块化:
+export 负责将模块内的内容导出, import 负责从其他模块导入内容, 并且 ES Module 将自动采用严格模式: use strict.
+
+### 基本使用
+
+```js:temp.js
+export const name = 'tinyRipple'
+```
+
+```js:main.js
+import { name } from './temp.js'
+console.log(name)
+```
+
+```html:index.html
+<body>
+  <script src="./main.js"></script>
+</body>
+```
+
+![](/blog-assets/JavaScript%20的模块化/Snipaste_2021-11-18_22-30-37.jpg)
+
+出现这种情况的原因是: 当通过 `<script>` 标签的方式加载 JS 文件时, 浏览器不会将该文件当作一个模块进行加载,
+此时文件中不允许出现 `import` 和 `export`, 因此需要特别指定 `type` 属性.
+
+```html
+<!-- 解决方案 -->
+<script src="./main.js" type="module"></script>
+```
+
+特别的, 如果通过本地加载 HTML 文件 (比如: `file://路径的文件`), 浏览器会出现 CORS 错误, 不能正常加载一个模块,
+这是因为 JavaScript 模块安全性的需要, 此时需要通过启动服务器进行测试 (如:VSCode 的 Live Server 插件).
+
+![](/blog-assets/JavaScript%20的模块化/Snipaste_2021-11-18_22-37-08.jpg)
+
+![](/blog-assets/JavaScript%20的模块化/Snipaste_2021-11-18_22-37-34.jpg)
+
+[JavaScript modules 模块 - JavaScript | MDN (mozilla.org)](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules)
+
+### export
+
+命名导出 (named export)
+
+- 第 1 种导出方式
+
+```js
+export const name = 'tinyRipple'
+export function foo() {
+
+}
+export class Bar {
+  
+}
+```
+
+- 第 2 种导出方式
+
+```js
+const name = 'tinyRipple'
+function foo() {
+
+}
+class Bar {
+
+}
+// {}为固定语法,而非一个对象
+export {
+  name,
+  foo,
+  Bar
+}
+```
+
+- 第 3 种导出方式,在导出时起别名
+
+```js
+const name = 'tinyRipple'
+function foo() {
+
+}
+class Bar {
+
+}
+
+export {
+  name as test_name,
+  foo as test_foo,
+  Bar as test_Bar
+}
+```
+
+### import
+
+- 第 1 种导入方式
+
+```js
+// {}为固定语法,而非一个对象
+import { test_name, test_foo, test_Bar } from './temp.js'
+```
+
+- 第 2 种导入方式,在导入时起别名
+
+```js
+import {
+  test_name as name,
+  test_foo as foo,
+  test_Bar as Bar
+} from './temp.js'
+```
+
+- 第 3 种导入方式, 通过 `*` 将模块所有功能放到一个模块功能对象 (module object) 上
+
+```js
+import * as object from './temp.js'
+
+console.log(object)
+```
+
+![](/blog-assets/JavaScript%20的模块化/Snipaste_2021-11-18_23-14-19.jpg)
+
+### export 和 import 结合使用
+
+```js:utils/math.js
+function add(number1, number2) {
+  return number1 + number2
+}
+
+function sub(number1, number2) {
+  return number1 - number2
+}
+
+export {
+  add, sub
+}
+```
+
+```js:utils/format.js
+function formatA(string) {
+  return 'AAA' + string
+}
+
+function formatB(string) {
+  return 'BBB' + string
+}
+
+export {
+  formatA, formatB
+}
+```
+
+```js:utils/index.js
+import { add, sub } from './math.js'
+import { formatA, formatB } from './format.js'
+
+export {
+  add, sub, formatA, formatB
+}
+```
+
+```js:main.js
+import { add, sub, formatA, formatB } from './utils/index.js'
+```
+
+采用以上方式统一导入导出更有利于代码的组织管理,
+此时在 `utils/index.js` 文件中就可以采用 export 和 import 结合使用的方式更加简洁地导入导出:
+
+```js
+export { add, sub } from './math.js'
+export { formatA, formatB } from './format.js'
+
+// 使用 * 导出全部功能
+export * from './math.js'
+export * from './format.js'
+```
+
+### default
+
+默认导出 (default export) 时可以不指定名字, 在导入时也不需要使用 {} 语法, 并且可以自己指定名称,
+方便和现有的 CommonJS 等规范相互操作. 特别的, 在一个模块中只能有一个默认导出.
+
+```js:temp.js
+const name = 'tinyRipple'
+
+// 默认导出的第一种方式
+// export {
+//   name as default
+// }
+// 默认导出的第二种方式
+export default name
+```
+
+```js:main.js
+import my_name from './temp.js'
+
+console.log(my_name) // tinyRipple
+```
+
+### import 函数
+
+ES Module 其实也是一种**同步**的机制, 即在文件加载完成之前后续的代码都不会执行,
+因此提出了一个 import 函数用以支持**异步**加载, 该函数返回 Promise, 执行 resolve 方法获取到 res.
+
+```js:temp.js
+const name = 'tinyRipple'
+const id = 1
+
+export {
+  name, id
+}
+```
+
+```js:main.js
+import('./temp.js').then(res => {
+  console.log(res)
+})
+```
+
+![](/blog-assets/JavaScript%20的模块化/Snipaste_2021-11-18_23-59-44.jpg)
+
+### import.meta
+
+import.meta 是在 ES11 (ES2020) 中新增的特性, 是一个给 JavaScript 模块暴露特定上下文的元数据属性对象,
+它包含了当前模块的信息, 如当前模块的 url.
+
+```js:main.js
+console.log(import.meta)
+console.log(import.meta.url)
+```
+
+![](/blog-assets/JavaScript%20的模块化/Snipaste_2021-11-19_00-06-01.jpg)
+
+### ES Module 的解析流程
+
+[ES modules: A cartoon deep-dive - Mozilla Hacks - the Web developer blog](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/)
+
+ES Module 的解析过程可以划分为三个阶段:
+
+![](/blog-assets/JavaScript%20的模块化/07_3_phases.png)
+
+1. 阶段一: 构建(Construction), 根据地址查找 JS 文件并下载, 将其解析为模块记录 (Module Record)
+
+![](/blog-assets/JavaScript%20的模块化/25_module_map.png)
+
+![](/blog-assets/JavaScript%20的模块化/10_construction.png)
+
+这里的解析仅仅是一个静态分析的过程, 即类似 `const name = 'tinyRipple'` 的内部代码不会被运行,
+因此不能在函数或者语句中使用 `import {} from ''`; 其次, 内部存在一个 Module Map 对已经下载的模块进行缓存,
+因此如果一个文件被多次引用也不会被多次下载.
+
+阶段二: 实例化 (Instantiation), 对模块记录进行实例化, 并且分配内存空间用以解析模块的导入和导出语句,
+将模块指向对应的内存地址. 在实例化阶段, 解析到的变量值都为 undefined, 因为此时才刚刚开始分配内存而并没有开始运行.
+
+阶段三: 运行 (Evaluation), 运行内部代码, 计算变量值并将值填充到相应内存地址中. 可以在导出的模块中修改导出变量的值,
+但是不可以在导入的模块中修改导入变量的值.
+
+![](/blog-assets/JavaScript%20的模块化/30_live_bindings_02.png)
+
+![](/blog-assets/JavaScript%20的模块化/30_live_bindings_04.png)
+
+```js:esm.js
+let name = 10;
+const o = {
+  id: 10
+};
+
+setTimeout(() => {
+  name = 20;
+  o.id = 20;
+}, 1000);
+
+export { name };
+export default o;
+```
+
+```js:index.js
+import { name } from './esm.js';
+import obj from './esm.js';
+
+console.log(name, obj.id); // 10 10
+
+setTimeout(() => {
+  console.log(name, obj.id); // 20 20
+}, 2000);
+```
+
+这里需要注意的是:
+
+1. esm 的机制是, 被输入模块是输出模块的引用, 因此上述中输入的 obj 即输出的 o 对象, 输入的 name 即输出的 name.
+因此两者都发生了改变. 因此 esm 和 cjs (commonjs) 最大的差别就是: commonjs 是值的拷贝, esm 是值的引用.
+2. cjs 在运行时进行加载, 即在 JS 运行的过程中才会生成导出对象; esm 是静态分析输出的,
+即在 JS 解析过程中就产生了导出模块.
+
+## CommonJS 和 ES Module 的相互调用
+
+1. 在浏览器环境中, 不可以相互调用, 因为浏览器默认情况下不支持 CommonJS
+2. 在 Node.js 环境中, 高版本 Node.js 支持 ES Module, 低版本 Node.js 不支持或者基于某些配置支持 ES Module
+3. 在 webpack 环境下, 支持两者的相互调用
+
+## UMD
+
+Universal Module Definition, 通用模块定义. UMD 是一种 JS 通用模块定义规范,
+让模块能在 JavaScript 的所有运行环境中发挥作用.
+这意味着要同时满足 CommonJS、AMD、CMD 和立即执行函数 (挂载到 window 上) 的标准.
