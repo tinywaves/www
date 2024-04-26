@@ -1,5 +1,6 @@
+.prose :where(p code):not(:where([class~='not-prose'], [class~='not-prose'] *)),
 .prose
-  :where(p code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  :where(li code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
   background: rgba(135, 131, 120, 0.15);
   color: #eb5757;
   border-radius: 4px;
@@ -13,6 +14,14 @@
   )::before,
 .prose
   :where(p code):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  )::after,
+.prose
+  :where(li code):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  )::before,
+.prose
+  :where(li code):not(
     :where([class~='not-prose'], [class~='not-prose'] *)
   )::after {
   content: '';
