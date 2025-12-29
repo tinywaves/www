@@ -1,159 +1,36 @@
-<a name="readme-top"></a>
-<div align="center">
-  
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Getting Started
 
-  <p align="center">
-    <h1>Astro Theme Cody</h1>
-  <p>
-    A minimalist blog theme built with Astro. A quick and easy starter build for anyone who wants to start their own blog.
-  </p>
-    <a href="https://astro-theme-cody.netlify.app">View Demo</a>
-    ·
-    <a href="https://github.com/kirontoo/astro-theme-cody/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/kirontoo/astro-theme-cody/issues">Request Feature</a>
-  </p>
-  </p>
-</div>
+First, run the development server:
 
-![demo-preview](https://github.com/kirontoo/astro-theme-cody/assets/28286622/d585dcb2-6d5f-4a68-871c-b6028cfcc27f)
-
-
-## Table of Contents
-1. [Motivation](#motivation)
-2. [Key Features](#key-features)
-3. [Demo](#demo)
-4. [Quick Start](#quick-start)
-5. [Commands](#commands)
-6. [Configure](#configure)
-7. [Deploy](#deploy)
-8. [Extra Functionality](#extra-funtionality)
-9. [Credit](#credit)
-
-## Motivation
-Although there are already so many blog themes out there, I wanted one that would give off
-that terminal/dev vibe and a few features that other themes did not have.
-
-## Key Features:
-- Astro v4 Fast 🚀
-- TailwindCSS Utility classes
-- Accessible, semantic HTML markup
-- Responsive & SEO-friendly
-- Dark / Light mode, using Tailwind and CSS variables
-- Pinned posts and projects
-- [Astro Assets Integration](https://docs.astro.build/en/guides/assets/) for optimised images
-- MD & [MDX](https://docs.astro.build/en/guides/markdown-content/#mdx-only-features) posts
-- Pagination
-- [Automatic RSS feed](https://docs.astro.build/en/guides/rss)
-- Auto-generated [sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/)
-- [Astro Icon](https://github.com/natemoo-re/astro-icon) svg icon component
-- Back To Top button
-
-## Demo
-Check out the demo [here](https://astro-theme-cody.netlify.app).
-
-## Quick Start
-[Create a new repo](https://github.com/new?template_name=astro-theme-cody&template_owner=kirontoo) from this template.
-
-```
-# npm 7+
-npm create astro@latest -- --template kirontoo/astro-theme-cody
-
-# pnpm
-pnpm dlx create-astro --template kirontoo/astro-theme-cody
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Commands
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-All commands are run from the root of the project, from a terminal:
+## Learn More
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm run dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm run build`           | Build your production site to `./dist/`          |
-| `pnpm run preview`         | Preview your build locally, before deploying     |
-| `pnpm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm run astro -- --help` | Get help using the Astro CLI                     |
+To learn more about Next.js, take a look at the following resources:
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## Configure
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-### Site Config, Social Media Links and Navbar Links
-Your site config, social media links and Navbar links are all placed within [`src/consts.ts`](https://github.com/kirontoo/astro-theme-cody/blob/main/src/consts.ts).
-There you can configure your site default title, description, language, profile, social media links and visible nav bar links.
+## Deploy on Vercel
 
-### Adding Posts and Projects
-This theme utilises [ Content Collections ](https://docs.astro.build/en/guides/content-collections/) 
-to organise Markdown and/or MDX files, as well as type-checking frontmatter 
-with a schema -> `src/content/config.ts`.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-You can find examples of blog posts in `src/content/blog` and examples of projects in `src/content/project`.
-
-#### Blog post frontmatter
-| Property (* = required) | Description |
-|:-----------------------| :---------- |
-| title * | Title of your post. Limited to a maximum of 150 characters  |
-| description * | Short description of your post, which will also be used for SEO. Has a max length of 250 characters. |
-| pubDate * | Published date |
-| updateDate | Optional date representing when the post has been updated. Note that this date will be used instead of the published date to order posts when available.|
-| heroImage | Optional cover image for you post. Include both a `src` and a `alt` property. Check `src/content/blog/first-post.md` for an example.|
-| ogImage | Optional image used for SEO. |
-| tags | Use optional tags to organize your posts into categories or topics. All tags will be shown in `yourdomain.com/tags`. |
-| series | Use optional series to organize your posts into a series of posts. All series will be shown in `yourdomain.com/series`. |
-| draft | Optional boolean. Removes posts from being published.|
-| order | Optional number value from 1 - 5 to pin certain posts to the top. Limited to only 5 pinned posts|
-| hide  | Optional boolean. Hide a post on `/blog` page. Will still show up in `/archive`|
-
-#### Project frontmatter
-
-| Property (* = required) | Description |
-|:-----------------------| :----------|
-| title * | Title of your project. Limited to a maximum of 150 characters  |
-| description * | Short description of your project, which will also be used for SEO.|
-| pubDate * | Published date |
-| heroImage | Optional cover image for you project. Include both a `src` and a `alt` property. Check `src/pages/projects/project-1.md` for an example.|
-| ogImage | Optional image used for SEO. |
-| stack * | A list of technologies your project used which will be rendered as icons. This theme uses the SVG Logos librar, you can use [icones.js.org](https://icones.js.org/collection/vscode-icons) to find the icons you need.|
-| platform | Link to website or demo |
-| website | Link to website or demo |
-| github | Your github repo link |
-| draft | Optional boolean. Removes projects from being published.|
-| order | Optional number value from 1 - 5 to pin certain projects to the top. Limited to only 5 pinned posts|
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Deploy
-Astro provides great documentation for deploying your Astro websites on various platforms.
-You can find it [here](https://docs.astro.build/en/guides/deploy/).
-
-## Extra Funtionality
-Check out [Astro Recipes](https://docs.astro.build/en/recipes/) to add other functionality like a RSS feed.
-
-
-## Credit
-
-This theme is based off of the theme [Astro Cactus](https://astro-theme-cactus.netlify.app) and [Hugo Risotto](https://risotto.joeroe.io).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-[contributors-shield]: https://img.shields.io/github/contributors/kirontoo/astro-theme-cody.svg?style=for-the-badge
-[contributors-url]: https://github.com/kirontoo/astro-theme-cody/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/kirontoo/astro-theme-cody.svg?style=for-the-badge
-[forks-url]: https://github.com/kirontoo/astro-theme-cody/network/members
-[stars-shield]: https://img.shields.io/github/stars/kirontoo/astro-theme-cody.svg?style=for-the-badge
-[stars-url]: https://github.com/kirontoo/astro-theme-cody/stargazers
-[issues-shield]: https://img.shields.io/github/issues/kirontoo/astro-theme-cody.svg?style=for-the-badge
-[issues-url]: https://github.com/kirontoo/astro-theme-cody/issues
-[license-shield]: https://img.shields.io/github/license/kirontoo/astro-theme-cody.svg?style=for-the-badge
-[license-url]: https://github.com/kirontoo/astro-theme-cody/blob/master/LICENSE.txt
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
