@@ -4,12 +4,12 @@ import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { getMoreArticles } from '#/app/articles/actions';
 import { Button } from '#/components/ui/button';
-import { FormattedDate } from '#/components/formatted-date';
+import FormattedDate from '#/components/formatted-date';
 import type { ArticleMeta } from '#/lib/articles';
 
 const ITEMS_PER_PAGE = 10;
 
-export function ArticleList({ initialArticles }: { initialArticles: ArticleMeta[] }) {
+export default function ArticleList({ initialArticles }: { initialArticles: ArticleMeta[] }) {
   const [articles, setArticles] = useState<ArticleMeta[]>(initialArticles);
   const [page, setPage] = useState(Math.ceil(initialArticles.length / ITEMS_PER_PAGE));
   const [loading, setLoading] = useState(false);

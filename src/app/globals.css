@@ -155,3 +155,122 @@ a:hover {
     @apply bg-background text-foreground;
   }
 }
+
+pre > code {
+  display: grid;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+}
+
+pre > code [data-line] {
+  padding: 0 1rem;
+  border-left: 2px solid transparent;
+}
+
+code[data-theme*=' '],
+code[data-theme*=' '] span {
+  color: var(--shiki-light);
+  background-color: transparent;
+}
+
+.dark code[data-theme*=' '],
+.dark code[data-theme*=' '] span {
+  color: var(--shiki-dark);
+  background-color: transparent;
+}
+
+code[data-line-numbers] {
+  counter-reset: line;
+}
+
+code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1.5rem;
+  margin-right: 1.5rem;
+  text-align: right;
+  color: rgba(115, 138, 148, 0.6);
+}
+
+code[data-line-numbers-max-digits='2'] > [data-line]::before {
+  width: 2rem;
+}
+
+code[data-line-numbers-max-digits='3'] > [data-line]::before {
+  width: 2.5rem;
+}
+
+pre > code [data-highlighted-line] {
+  border-left-color: rgb(59, 130, 246);
+}
+
+:root:not(.dark) pre > code [data-highlighted-line] {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.dark pre > code [data-highlighted-line] {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+
+[data-highlighted-chars] {
+  background-color: rgba(59, 130, 246, 0.25);
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.25rem;
+}
+
+pre > code [data-highlighted-line-id='add'] {
+  border-left-color: rgb(46, 160, 67);
+}
+
+:root:not(.dark) pre > code [data-highlighted-line-id='add'] {
+  background-color: rgba(46, 160, 67, 0.15);
+}
+
+.dark pre > code [data-highlighted-line-id='add'] {
+  background-color: rgba(46, 160, 67, 0.2);
+}
+
+pre > code [data-highlighted-line-id='del'] {
+  border-left-color: rgb(248, 81, 73);
+  opacity: 0.8;
+}
+
+:root:not(.dark) pre > code [data-highlighted-line-id='del'] {
+  background-color: rgba(248, 81, 73, 0.15);
+}
+
+.dark pre > code [data-highlighted-line-id='del'] {
+  background-color: rgba(248, 81, 73, 0.2);
+}
+
+[data-rehype-pretty-code-title] {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: none;
+}
+
+.dark [data-rehype-pretty-code-title] {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-rehype-pretty-code-title] + pre {
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+[data-rehype-pretty-code-caption] {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.75rem;
+  color: rgba(115, 138, 148, 0.8);
+  margin-top: -0.75rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}

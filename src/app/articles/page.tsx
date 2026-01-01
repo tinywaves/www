@@ -1,5 +1,5 @@
 import { getAllArticles } from '#/lib/articles';
-import { ArticleList } from '#/components/article-list';
+import ArticleList from '#/components/article-list';
 
 export default function Page() {
   const allArticles = getAllArticles();

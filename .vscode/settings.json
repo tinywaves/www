@@ -106,6 +106,9 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "cSpell.words": [
+    "rehype",
+    "shiki",
+    "shikijs",
     "unrs",
     "vercel"
   ]
