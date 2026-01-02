@@ -1,7 +1,11 @@
 import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeRaw from 'rehype-raw';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import Zoom from 'react-medium-image-zoom';
+import { resolveImageSrc } from '#/lib/utils';
 import type { ComponentPropsWithoutRef } from 'react';
 import type { Options } from 'rehype-pretty-code';
+import 'react-medium-image-zoom/dist/styles.css';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -14,12 +18,14 @@ type CodeProps = ComponentPropsWithoutRef<'code'> & {
   'data-language'?: string;
 };
 type PreProps = ComponentPropsWithoutRef<'pre'>;
+type ImageProps = ComponentPropsWithoutRef<'img'>;
 
 const rehypePrettyCodeOptions: Options = {
   theme: {
     dark: 'github-dark-dimmed',
     light: 'github-light',
   },
+  bypassInlineCode: true,
   keepBackground: false,
   defaultLang: 'plaintext',
   filterMetaString(metadata) {
@@ -119,6 +125,22 @@ const components = {
       {...props}
     />
   ),
+  img: (props: ImageProps) => {
+    const src = typeof props.src === 'string' ? props.src : undefined;
+    const resolvedSrc = resolveImageSrc(src);
+    const { style: _style, ...restProps } = props;
+
+    return (
+      <Zoom wrapElement="span">
+        <img
+          className="my-4 h-auto max-w-full cursor-zoom-in rounded-lg"
+          loading="lazy"
+          {...restProps}
+          src={resolvedSrc}
+        />
+      </Zoom>
+    );
+  },
 };
 
 export default function ContentRender({ source }: { source: string }) {
@@ -128,7 +150,8 @@ export default function ContentRender({ source }: { source: string }) {
       components={components}
       options={{
         mdxOptions: {
-          rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
+          format: 'md',
+          rehypePlugins: [rehypeRaw, [rehypePrettyCode, rehypePrettyCodeOptions]],
         },
       }}
     />

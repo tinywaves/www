@@ -73,3 +73,5 @@ const tinywaves = 'my nickname';
 const name = 'Donghui';
 const name = 'Lyle';
 ```
+
+![](./_assets//00000_hello-world/CleanShot%202026-01-02%20at%2008.52.37@2x.png)

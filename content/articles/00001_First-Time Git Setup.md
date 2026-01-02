@@ -18,8 +18,16 @@ keywords:
   - xxx
 ---
 
+# First-Time Git Setup
+
+When setting up Git for the first time on a new machine, there are a few essential configurations to ensure everything runs smoothly. Below are the commands I use to configure Git globally:
+
 ```shell
 git config --global user.name "tinywaves"
 git config --global user.email dhzhme@gmail.com
 git config --global init.defaultBranch main
 ```
+
+# Commit with gpg
+
+[Commit with gpg](commit-with-gpg)
