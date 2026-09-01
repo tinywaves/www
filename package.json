@@ -18,11 +18,14 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "deploy": "wrangler deploy"
   },
   "type": "module",
   "version": "0.0.0",
-  "devDependencies": {},
+  "devDependencies": {
+    "wrangler": "^4.127.1"
+  },
   "dependencies": {
     "astro": "^7.2.9"
   }
