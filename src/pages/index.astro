@@ -7,11 +7,12 @@ const navigation = [
 ];
 
 const socialLinks = [
-  { label: 'GitHub', href: '#' },
-  { label: 'Email', href: '#' },
-  { label: 'twitter', href: '#' },
-  { label: 'WeChat', href: '#' },
+  { label: 'GitHub', href: 'https://github.com/tinywaves', external: true },
+  { label: 'Email', href: 'mailto:dhzhme@gmail.com', external: false },
+  { label: 'X/Twitter', href: 'https://x.com/tinywavesss', external: true },
 ];
+
+const wechatId = 'dhzhme';
 ---
 
 <!doctype html>
@@ -31,13 +32,77 @@ const socialLinks = [
       </nav>
 
       <div class="social-links" aria-label="Social links">
-        {socialLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+        {socialLinks.map((item) => (
+          <a
+            href={item.href}
+            target={item.external ? '_blank' : undefined}
+            rel={item.external ? 'noopener noreferrer' : undefined}
+          >
+            {item.label}
+          </a>
+        ))}
+        <span class="wechat-wrap">
+          <button
+            class="wechat-link"
+            type="button"
+            data-copy-wechat={wechatId}
+            aria-describedby="wechat-tip"
+          >
+            WeChat
+          </button>
+          <span class="wechat-tip" id="wechat-tip" role="tooltip">Copy to clipboard</span>
+        </span>
       </div>
 
       <footer>© tinywaves</footer>
     </main>
   </body>
 </html>
+
+<script>
+  const copyButton = document.querySelector('[data-copy-wechat]');
+  const copyTip = document.querySelector('#wechat-tip');
+  const defaultCopyTip = copyTip?.textContent ?? 'Copy to clipboard';
+  let restoreTipTimer;
+
+  const showCopyStatus = (message) => {
+    if (!copyTip) return;
+    window.clearTimeout(restoreTipTimer);
+    copyTip.textContent = message;
+    restoreTipTimer = window.setTimeout(() => {
+      copyTip.textContent = defaultCopyTip;
+    }, 1800);
+  };
+
+  const copyText = async (text) => {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.setAttribute('readonly', '');
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    textArea.remove();
+  };
+
+  copyButton?.addEventListener('click', async () => {
+    const wechatId = copyButton.getAttribute('data-copy-wechat');
+    if (!wechatId) return;
+
+    try {
+      await copyText(wechatId);
+      showCopyStatus('Copied to clipboard');
+    } catch {
+      showCopyStatus('Copy failed');
+    }
+  });
+</script>
 
 <style>
   @font-face {
@@ -129,6 +194,50 @@ const socialLinks = [
   .social-links a:hover,
   .social-links a:focus-visible {
     color: #f09228;
+  }
+
+  .wechat-link {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 0;
+    padding: 0;
+    color: #1772d0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .wechat-link:hover,
+  .wechat-link:focus-visible {
+    color: #f09228;
+  }
+
+  .wechat-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .wechat-tip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    width: max-content;
+    padding: 5px 8px;
+    color: #fff;
+    background: #333;
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 4px);
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  .wechat-wrap:hover .wechat-tip,
+  .wechat-link:focus-visible + .wechat-tip {
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
 
   nav a:not(:last-child)::after {
