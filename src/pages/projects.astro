@@ -1,0 +1,26 @@
+---
+import ProjectItem from '../components/ProjectItem.astro';
+import { projects } from '../data/projects';
+import ContentLayout from '../layouts/ContentLayout.astro';
+---
+
+<ContentLayout current="projects" title="Projects">
+  <section aria-label="Projects">
+    {
+      projects.length > 0 ? (
+        <div class="project-list">
+          {projects.map((project) => <ProjectItem project={project} />)}
+        </div>
+      ) : (
+        <p class="coming-soon">Coming soon</p>
+      )
+    }
+  </section>
+</ContentLayout>
+
+<style>
+  .project-list {
+    display: grid;
+    gap: 28px;
+  }
+</style>

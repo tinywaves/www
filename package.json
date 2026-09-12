@@ -4,7 +4,7 @@
     "packageManager": {
       "name": "pnpm",
       "onFail": "download",
-      "version": "^11.25.0"
+      "version": "11.25.0"
     },
     "runtime": {
       "name": "node",
@@ -19,7 +19,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "deploy": "wrangler deploy"
+    "deploy": "pnpm build && wrangler deploy"
   },
   "type": "module",
   "version": "0.0.0",

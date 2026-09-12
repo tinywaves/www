@@ -4,8 +4,8 @@ Personal website built with [Astro](https://astro.build/).
 
 ## Requirements
 
-- Node.js `24.20` or later
-- pnpm `11.25` or later
+- Node.js `>=24.20.0 <25`
+- pnpm `11.25.0`
 
 ## Getting Started
 
@@ -39,17 +39,32 @@ pnpm preview
 
 ```text
 .
-|-- public/             # Static files copied directly to the output
+|-- content/
+|   `-- articles/       # Source articles and their assets
+|-- public/             # Static assets copied directly to the output
 |-- src/
-|   |-- pages/          # Astro pages and routes
+|   |-- components/     # Shared UI components
+|   |-- data/           # Site and project data
+|   |-- layouts/        # Shared page layouts
+|   `-- pages/          # Astro pages and routes
 |-- astro.config.mjs    # Astro configuration
 |-- package.json        # Scripts and dependencies
+|-- pnpm-workspace.yaml # pnpm workspace settings
 |-- tsconfig.json       # TypeScript configuration
+`-- wrangler.jsonc      # Cloudflare deployment configuration
 ```
 
 ## Deployment
 
-`pnpm build` generates the Astro production output. No server adapter is configured, so the project is currently intended for static hosting. Deploy the generated `dist/` directory to any static file hosting service.
+The site is generated as static files in `dist/`. To deploy those files to
+Cloudflare Workers Static Assets, authenticate Wrangler and run:
+
+```bash
+pnpm exec wrangler login
+pnpm deploy
+```
+
+The deploy command creates a fresh production build before uploading it.
 
 ## License
 

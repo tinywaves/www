@@ -1,0 +1,104 @@
+---
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const hasActions = project.liveUrl || project.sourceUrl;
+---
+
+<article class="project-item">
+  <div class="project-heading">
+    <h2>{project.title}</h2>
+
+    {
+      hasActions && (
+        <div class="actions">
+          {project.liveUrl && (
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+              Live
+            </a>
+          )}
+          {project.sourceUrl && (
+            <a href={project.sourceUrl} target="_blank" rel="noopener noreferrer">
+              Source
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
+
+  <p class="summary">{project.summary}</p>
+
+  <div class="technologies" aria-label="Technologies">
+    {
+      project.technologies.map((technology) => (
+        <span class="technology">{technology}</span>
+      ))
+    }
+  </div>
+</article>
+
+<style>
+  .project-item {
+    min-width: 0;
+  }
+
+  .project-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 20px;
+  }
+
+  h2 {
+    min-width: 0;
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .summary {
+    margin: 7px 0 5px;
+    color: #444;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .technologies {
+    display: flex;
+    flex-wrap: wrap;
+    color: #777;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .technology:not(:last-child)::after {
+    content: '·';
+    display: inline-block;
+    margin: 0 7px;
+    color: #bbb;
+  }
+
+  .actions {
+    display: flex;
+    gap: 16px;
+    flex: none;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .actions a {
+    color: #1772d0;
+  }
+
+  .actions a:hover,
+  .actions a:focus-visible {
+    color: #f09228;
+  }
+</style>

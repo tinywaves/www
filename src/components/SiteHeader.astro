@@ -1,0 +1,85 @@
+---
+import { contentNavigation, type ContentSection } from '../data/site';
+
+interface Props {
+  current: ContentSection;
+}
+
+const { current } = Astro.props;
+---
+
+<header class="site-header">
+  <a class="brand" href="/">Lyle Zheng</a>
+
+  <nav aria-label="Primary navigation">
+    {
+      contentNavigation.map((item) => (
+        <a
+          class:list={{ current: item.id === current }}
+          href={item.href}
+          aria-current={item.id === current ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .brand {
+    color: #000;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  nav a {
+    color: #1772d0;
+  }
+
+  nav a.current {
+    color: #000;
+  }
+
+  .brand:hover,
+  .brand:focus-visible,
+  nav a:hover,
+  nav a:focus-visible {
+    color: #f09228;
+  }
+
+  nav a:not(:last-child)::after {
+    content: '·';
+    display: inline-block;
+    margin: 0 14px;
+    color: #bbb;
+    font-weight: 400;
+  }
+
+  @media (max-width: 560px) {
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    nav a:not(:last-child)::after {
+      margin: 0 10px;
+    }
+  }
+</style>

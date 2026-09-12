@@ -1,0 +1,196 @@
+---
+import { socialLinks, wechatId } from '../data/site';
+---
+
+<footer class="site-footer">
+  <span>© tinywaves</span>
+  <div class="social-links" aria-label="Social links">
+    {
+      socialLinks.map((item) => (
+        <a
+          href={item.href}
+          target={item.external ? '_blank' : undefined}
+          rel={item.external ? 'noopener noreferrer' : undefined}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+    <span class="wechat-wrap">
+      <button
+        class="wechat-link"
+        type="button"
+        data-copy-wechat={wechatId}
+        aria-describedby="wechat-tip"
+      >
+        WeChat
+      </button>
+      <span class="wechat-tip" id="wechat-tip" role="tooltip">Copy to clipboard</span>
+      <span
+        class="visually-hidden"
+        data-copy-status
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      ></span>
+    </span>
+  </div>
+</footer>
+
+<script>
+  const copyButton = document.querySelector('[data-copy-wechat]');
+  const copyTip = document.querySelector('#wechat-tip');
+  const copyStatus = document.querySelector('[data-copy-status]');
+  const defaultCopyTip = copyTip?.textContent ?? 'Copy to clipboard';
+  let restoreTipTimer;
+
+  const showCopyStatus = (message) => {
+    if (!copyTip) return;
+    window.clearTimeout(restoreTipTimer);
+    copyTip.textContent = message;
+    if (copyStatus) copyStatus.textContent = message;
+    restoreTipTimer = window.setTimeout(() => {
+      copyTip.textContent = defaultCopyTip;
+      if (copyStatus) copyStatus.textContent = '';
+    }, 1800);
+  };
+
+  const copyText = async (text) => {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.setAttribute('readonly', '');
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    textArea.remove();
+  };
+
+  copyButton?.addEventListener('click', async () => {
+    const wechatId = copyButton.getAttribute('data-copy-wechat');
+    if (!wechatId) return;
+
+    try {
+      await copyText(wechatId);
+      showCopyStatus('Copied to clipboard');
+    } catch {
+      showCopyStatus('Copy failed');
+    }
+  });
+</script>
+
+<style>
+  .site-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    padding-top: 48px;
+    color: #666;
+    font-size: 13px;
+  }
+
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    color: #777;
+  }
+
+  .social-links a,
+  .wechat-link {
+    color: #1772d0;
+  }
+
+  .social-links a:hover,
+  .social-links a:focus-visible {
+    color: #f09228;
+  }
+
+  .social-links a:not(:last-child)::after {
+    content: '/';
+    display: inline-block;
+    margin: 0 13px;
+    color: #bbb;
+  }
+
+  .wechat-link {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .wechat-link:hover,
+  .wechat-link:focus-visible {
+    color: #f09228;
+  }
+
+  .wechat-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .wechat-tip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    width: max-content;
+    padding: 5px 8px;
+    color: #fff;
+    background: #333;
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 4px);
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  .wechat-wrap:hover .wechat-tip,
+  .wechat-link:focus-visible + .wechat-tip {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @media (max-width: 480px) {
+    .site-footer {
+      flex-direction: column-reverse;
+      justify-content: flex-start;
+      gap: 12px;
+      padding-top: 36px;
+      text-align: center;
+    }
+
+    .social-links {
+      row-gap: 4px;
+    }
+
+    .social-links a:not(:last-child)::after {
+      margin: 0 8px;
+    }
+  }
+</style>

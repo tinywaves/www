@@ -1,0 +1,65 @@
+---
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import type { ContentSection } from '../data/site';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  current: ContentSection;
+  title: string;
+}
+
+const { current, title } = Astro.props;
+---
+
+<BaseLayout title={`${title} | Lyle Zheng`}>
+  <div class="content-shell">
+    <SiteHeader current={current} />
+
+    <main class="content-main">
+      <slot />
+    </main>
+
+    <SiteFooter />
+  </div>
+</BaseLayout>
+
+<style>
+  .content-shell {
+    width: 100%;
+    max-width: 760px;
+    min-height: calc(100svh - var(--page-viewport-offset));
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content-main {
+    flex: 1;
+    padding: 72px 0 40px;
+  }
+
+  .content-main :global(h1) {
+    margin: 0 0 32px;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  .content-main :global(.coming-soon) {
+    margin: 0;
+    color: #777;
+  }
+
+  @media (max-width: 560px) {
+    .content-main {
+      padding-top: 56px;
+    }
+
+    .content-main :global(h1) {
+      margin-bottom: 24px;
+      font-size: 30px;
+    }
+  }
+</style>
