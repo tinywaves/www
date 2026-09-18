@@ -20,4 +20,11 @@ export const projects = [
     technologies: ['TypeScript', 'tsdown', 'Vitest'],
     sourceUrl: 'https://github.com/tinywaves/starter-typescript',
   },
+  {
+    title: 'www',
+    summary: 'Personal website built with Astro and deployed on Cloudflare.',
+    technologies: ['Astro', 'TypeScript', 'Cloudflare'],
+    liveUrl: 'https://www.tinywaves.site/',
+    sourceUrl: 'https://github.com/tinywaves/www',
+  },
 ] satisfies Project[];
