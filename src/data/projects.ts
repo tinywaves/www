@@ -16,7 +16,8 @@ export const projects = [
   },
   {
     title: 'starter-typescript',
-    summary: 'A minimal, opinionated starter for building and publishing TypeScript libraries.',
+    summary:
+      'A minimal, opinionated starter for building and publishing TypeScript libraries.',
     technologies: ['TypeScript', 'tsdown', 'Vitest'],
     sourceUrl: 'https://github.com/tinywaves/starter-typescript',
   },
