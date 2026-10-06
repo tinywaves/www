@@ -34,6 +34,14 @@ export const projects = [
     sourceUrl: 'https://github.com/yetone/magpie',
   },
   {
+    title: 'eslint-plugin-better-tailwindcss',
+    role: 'Contributor',
+    summary:
+      'An ESLint and Oxlint plugin for formatting and validating Tailwind CSS classes.',
+    technologies: ['TypeScript', 'ESLint', 'Tailwind CSS'],
+    sourceUrl: 'https://github.com/schoero/eslint-plugin-better-tailwindcss',
+  },
+  {
     title: 'www',
     role: 'Maintainer',
     summary: 'Personal website built with Astro and deployed on Cloudflare.',
