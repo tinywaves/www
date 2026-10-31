@@ -1,9 +1,10 @@
 ---
 import { socialLinks, wechatId } from '../data/site';
+import ThemeToggle from './ThemeToggle.astro';
 ---
 
 <footer class="site-footer">
-  <span>© tinywaves</span>
+  <ThemeToggle />
   <div class="social-links" aria-label="Social links">
     {
       socialLinks.map((item) => (
@@ -92,7 +93,7 @@ import { socialLinks, wechatId } from '../data/site';
     align-items: center;
     gap: 32px;
     padding-top: 48px;
-    color: #666;
+    color: var(--color-text-muted);
     font-size: 13px;
   }
 
@@ -101,24 +102,24 @@ import { socialLinks, wechatId } from '../data/site';
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    color: #777;
+    color: var(--color-text-subtle);
   }
 
   .social-links a,
   .wechat-link {
-    color: #1772d0;
+    color: var(--color-link);
   }
 
   .social-links a:hover,
   .social-links a:focus-visible {
-    color: #f09228;
+    color: var(--color-accent);
   }
 
   .social-links a:not(:last-child)::after {
     content: '/';
     display: inline-block;
     margin: 0 13px;
-    color: #bbb;
+    color: var(--color-separator);
   }
 
   .wechat-link {
@@ -133,7 +134,7 @@ import { socialLinks, wechatId } from '../data/site';
 
   .wechat-link:hover,
   .wechat-link:focus-visible {
-    color: #f09228;
+    color: var(--color-accent);
   }
 
   .wechat-wrap {
@@ -160,8 +161,8 @@ import { socialLinks, wechatId } from '../data/site';
     left: 50%;
     width: max-content;
     padding: 5px 8px;
-    color: #fff;
-    background: #333;
+    color: var(--color-tooltip-text);
+    background: var(--color-tooltip-background);
     font-size: 12px;
     font-weight: 400;
     opacity: 0;
@@ -180,6 +181,7 @@ import { socialLinks, wechatId } from '../data/site';
     .site-footer {
       flex-direction: column-reverse;
       justify-content: flex-start;
+      align-items: center;
       gap: 12px;
       padding-top: 36px;
       text-align: center;

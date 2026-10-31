@@ -1,0 +1,191 @@
+---
+const options = [
+  { value: 'system', label: 'System appearance' },
+  { value: 'light', label: 'Light appearance' },
+  { value: 'dark', label: 'Dark appearance' },
+] as const;
+---
+
+<div class="theme-switcher" data-theme-switcher role="radiogroup" aria-label="Appearance">
+  {
+    options.map((option) => (
+      <button
+        class="theme-option"
+        type="button"
+        role="radio"
+        data-theme-value={option.value}
+        aria-label={option.label}
+        aria-checked={option.value === 'system' ? 'true' : 'false'}
+        tabindex={option.value === 'system' ? '0' : '-1'}
+        title={option.label}
+      >
+        {option.value === 'system' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="13" rx="2" />
+            <path d="M8 21h8M12 17v4" />
+          </svg>
+        )}
+        {option.value === 'light' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+          </svg>
+        )}
+        {option.value === 'dark' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.2 14.5A8.5 8.5 0 0 1 9.5 3.8 8.5 8.5 0 1 0 20.2 14.5Z" />
+          </svg>
+        )}
+      </button>
+    ))
+  }
+</div>
+
+<script>
+  const storageKey = 'theme-preference';
+  const validPreferences = ['light', 'dark', 'system'];
+  const root = document.documentElement;
+  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+
+  const getPreference = () => {
+    const preference = root.dataset.themePreference;
+    return validPreferences.includes(preference) ? preference : 'system';
+  };
+
+  const resolveTheme = (preference) =>
+    preference === 'system' ? (systemTheme.matches ? 'dark' : 'light') : preference;
+
+  const syncControls = () => {
+    const preference = getPreference();
+
+    document.querySelectorAll('[data-theme-switcher]').forEach((switcher) => {
+      switcher.querySelectorAll('[data-theme-value]').forEach((button) => {
+        const isSelected = button.getAttribute('data-theme-value') === preference;
+        button.setAttribute('aria-checked', String(isSelected));
+        button.tabIndex = isSelected ? 0 : -1;
+      });
+    });
+  };
+
+  const applyTheme = (preference, persist = true) => {
+    const theme = resolveTheme(preference);
+
+    root.dataset.themePreference = preference;
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+    themeColor?.setAttribute('content', theme === 'dark' ? '#161615' : '#ffffff');
+
+    if (persist) {
+      try {
+        localStorage.setItem(storageKey, preference);
+      } catch {}
+    }
+
+    syncControls();
+  };
+
+  document.querySelectorAll('[data-theme-value]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const preference = button.getAttribute('data-theme-value');
+      if (!validPreferences.includes(preference)) return;
+
+      try {
+        localStorage.setItem(storageKey, preference);
+      } catch {}
+
+      applyTheme(preference, false);
+    });
+  });
+
+  document.querySelectorAll('[data-theme-switcher]').forEach((switcher) => {
+    switcher.addEventListener('keydown', (event) => {
+      const buttons = [...switcher.querySelectorAll('[data-theme-value]')];
+      const selectedIndex = buttons.findIndex(
+        (button) => button.getAttribute('aria-checked') === 'true',
+      );
+      const focusedIndex = buttons.indexOf(document.activeElement);
+      const currentIndex = focusedIndex >= 0 ? focusedIndex : selectedIndex;
+      let nextIndex;
+
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+        nextIndex = (currentIndex + 1) % buttons.length;
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+        nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+      } else if (event.key === 'Home') {
+        nextIndex = 0;
+      } else if (event.key === 'End') {
+        nextIndex = buttons.length - 1;
+      }
+
+      if (nextIndex === undefined) return;
+
+      event.preventDefault();
+      buttons[nextIndex].focus();
+      buttons[nextIndex].click();
+    });
+  });
+
+  systemTheme.addEventListener('change', () => {
+    if (getPreference() === 'system') applyTheme('system', false);
+  });
+
+  applyTheme(getPreference(), false);
+</script>
+
+<style>
+  .theme-switcher {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 1px;
+    padding: 2px;
+    border: 1px solid var(--theme-switcher-border);
+    border-radius: 999px;
+    background: var(--theme-switcher-background);
+  }
+
+  .theme-option {
+    display: inline-grid;
+    width: 28px;
+    height: 24px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    color: var(--theme-switcher-icon);
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .theme-option svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  .theme-option[aria-checked='true'] {
+    color: var(--theme-switcher-active-text);
+    background: var(--theme-switcher-active-background);
+    box-shadow: var(--theme-switcher-shadow);
+  }
+
+  .theme-option:hover,
+  .theme-option[aria-checked='true']:hover {
+    color: var(--color-accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .theme-option {
+      transition:
+        color 160ms ease,
+        background-color 160ms ease,
+        box-shadow 160ms ease;
+    }
+  }
+</style>

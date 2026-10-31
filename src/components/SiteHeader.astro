@@ -35,7 +35,7 @@ const { current } = Astro.props;
   }
 
   .brand {
-    color: #000;
+    color: var(--color-text);
     font-size: 18px;
     font-weight: 700;
   }
@@ -49,25 +49,25 @@ const { current } = Astro.props;
   }
 
   nav a {
-    color: #1772d0;
+    color: var(--color-link);
   }
 
   nav a.current {
-    color: #000;
+    color: var(--color-text);
   }
 
   .brand:hover,
   .brand:focus-visible,
   nav a:hover,
   nav a:focus-visible {
-    color: #f09228;
+    color: var(--color-accent);
   }
 
   nav a:not(:last-child)::after {
     content: '·';
     display: inline-block;
     margin: 0 14px;
-    color: #bbb;
+    color: var(--color-separator);
     font-weight: 400;
   }
 
